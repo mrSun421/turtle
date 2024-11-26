@@ -9,7 +9,9 @@ rotation_edit_mode = 2
 
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(13.0454, 0, 0, 0, 1, 0, 0, 0, 1.00002, 0, 0, 5)
-fov = 90.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 10, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, -20, -20)
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 20, 20)

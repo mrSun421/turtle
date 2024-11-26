@@ -4,9 +4,8 @@
 [ext_resource type="PackedScene" uid="uid://eru17x0jcg0b" path="res://rocket_toy_01.glb" id="2_nmcrk"]
 
 [node name="Turtle" type="Node3D"]
-transform = Transform3D(-4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 0, 0, 1, 0, 0, 0)
-rotation_edit_mode = 1
 script = ExtResource("1_flm7y")
 
 [node name="rocket_toy_012" parent="." instance=ExtResource("2_nmcrk")]
-transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+transform = Transform3D(-2.18557e-07, 5, 0, -5, -2.18557e-07, 0, 0, 0, 5, 0, 0, 0)
+rotation_edit_mode = 1
