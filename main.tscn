@@ -1,14 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://87mpup613jlr"]
+[gd_scene load_steps=4 format=3 uid="uid://87mpup613jlr"]
 
+[ext_resource type="Script" path="res://main.gd" id="1_kjfn4"]
 [ext_resource type="PackedScene" uid="uid://bq766ueyhy4f" path="res://turtle.tscn" id="1_ugrew"]
+[ext_resource type="Script" path="res://camera_3d.gd" id="3_mylqk"]
 
 [node name="Main" type="Node3D"]
+script = ExtResource("1_kjfn4")
 
 [node name="Turtle" parent="." instance=ExtResource("1_ugrew")]
 rotation_edit_mode = 2
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(13.0454, 0, 0, 0, 1, 0, 0, 0, 1.00002, 0, 0, 5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
+rotation_edit_mode = 1
+script = ExtResource("3_mylqk")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, -20, -20)
