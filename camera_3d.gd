@@ -29,9 +29,8 @@ func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
 		var event_mm = event as InputEventMouseMotion
 		if holdingMiddleMouse:
-			pass
-			# TODO: Implement translation with mouse.
-			var mouse_translation = Vector3(event_mm.relative.x, event_mm.relative.y, 0)
+			var mouse_translation = Vector3(-event_mm.relative.x, event_mm.relative.y, 0)
+			self.position += (self.basis * mouse_translation) * translation_sensitivity
 
 		if holdingRightMouse:
 			var mouse_translation = event_mm.relative
