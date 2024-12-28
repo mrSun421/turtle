@@ -20,3 +20,31 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, -20, -20)
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 20, 20)
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_top = -1.0
+offset_right = 137.0
+offset_bottom = 45.0
+text = "Start"
+
+[node name="ResetButton" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 137.0
+offset_right = 283.0
+offset_bottom = 45.0
+text = "Reset"
+
+[connection signal="pressed" from="CanvasLayer/Control/StartButton" to="Turtle" method="_on_start_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="Turtle" method="_on_reset_button_pressed"]

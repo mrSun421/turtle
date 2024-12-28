@@ -8,7 +8,7 @@ const WAIT_TIME = 0.2
 var turtle_actions = []
 var visual_cylinders = []
 
-func executeMove(distance: float) -> Tween:
+func execute_move(distance: float) -> Tween:
 	var pos_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
 	var current_position = self.position
 	var future_position = current_position + distance * self.basis.x
@@ -17,7 +17,7 @@ func executeMove(distance: float) -> Tween:
 	return pos_tween
 
 
-func executeTurn(angle: float) -> Tween:
+func execute_turn(angle: float) -> Tween:
 	var heading: Vector3 = self.basis.x
 	var normal: Vector3 = self.basis.y
 	var angle_in_rad = deg_to_rad(angle)
@@ -26,7 +26,7 @@ func executeTurn(angle: float) -> Tween:
 	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
 	return rotation_tween
 
-func executeRoll(angle: float) -> Tween:
+func execute_roll(angle: float) -> Tween:
 	var heading: Vector3 = self.basis.x
 	var normal: Vector3 = self.basis.y
 	var angle_in_rad = deg_to_rad(angle)
@@ -35,7 +35,7 @@ func executeRoll(angle: float) -> Tween:
 	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
 	return rotation_tween
 
-func executeDive(angle: float) -> Tween:
+func execute_dive(angle: float) -> Tween:
 	var heading: Vector3 = self.basis.x
 	var normal: Vector3 = self.basis.y
 	var left: Vector3 = self.basis.z
@@ -45,22 +45,22 @@ func executeDive(angle: float) -> Tween:
 	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
 	return rotation_tween
 	
-func executeTurtleActions():
+func execute_turtle_action():
 	for action in turtle_actions:
 		var current_tween: Tween
 		var current_position = self.position
 		if action is MoveAction:
 			var m_action: MoveAction = action as MoveAction
-			current_tween = self.executeMove(m_action.distance)
+			current_tween = self.execute_move(m_action.distance)
 		elif action is TurnAction:
 			var t_action: TurnAction = action as TurnAction
-			current_tween = self.executeTurn(t_action.angle)
+			current_tween = self.execute_turn(t_action.angle)
 		elif action is RollAction:
 			var r_action: RollAction = action as RollAction
-			current_tween = self.executeRoll(r_action.angle)
+			current_tween = self.execute_roll(r_action.angle)
 		elif action is DiveAction:
 			var d_action: DiveAction = action as DiveAction
-			current_tween = self.executeDive(d_action.angle)
+			current_tween = self.execute_dive(d_action.angle)
 		else:
 			print("Action Something went wrong")
 		
@@ -78,7 +78,14 @@ func _ready() -> void:
 		self.turtle_actions.append(MoveAction.new(3))
 		self.turtle_actions.append(DiveAction.new(120))
 
-	self.executeTurtleActions()
+
+func _on_start_button_pressed() -> void:
+	self.execute_turtle_action()
+
+
+func _on_reset_button_pressed() -> void:
+	# TODO: Implement reset, Involes refactoring line and point creating logic
+	pass
 
 
 class MoveAction:
