@@ -1,12 +1,20 @@
 extends Node3D
 class_name Turtle
 
+signal moving(current_pos: Vector3)
+signal finished_move(pos1: Vector3, pos2: Vector3)
+signal finished_resetting
+
 const TWEEN_TIME = 0.5
 const WAIT_TIME = 0.2
 
 
 var turtle_actions = []
-var visual_cylinders = []
+var turtle_event_queue = []
+var is_moving = false
+var is_running = false
+var reset_was_pressed = false
+var current_tween: Tween
 
 func execute_move(distance: float) -> Tween:
 	var pos_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
@@ -45,47 +53,66 @@ func execute_dive(angle: float) -> Tween:
 	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
 	return rotation_tween
 	
-func execute_turtle_action():
-	for action in turtle_actions:
-		var current_tween: Tween
+func execute_turtle_actions():
+	turtle_event_queue.append_array(turtle_actions)
+
+	while !turtle_event_queue.is_empty():
 		var current_position = self.position
-		if action is MoveAction:
-			var m_action: MoveAction = action as MoveAction
-			current_tween = self.execute_move(m_action.distance)
-		elif action is TurnAction:
-			var t_action: TurnAction = action as TurnAction
-			current_tween = self.execute_turn(t_action.angle)
-		elif action is RollAction:
-			var r_action: RollAction = action as RollAction
-			current_tween = self.execute_roll(r_action.angle)
-		elif action is DiveAction:
-			var d_action: DiveAction = action as DiveAction
-			current_tween = self.execute_dive(d_action.angle)
-		else:
-			print("Action Something went wrong")
-		
-
+		var current_action = turtle_event_queue.pop_front()
+		current_tween = self._execute_turtle_action(current_action, current_position)
 		await current_tween.finished
-		if action is MoveAction:
-			Draw3D.point(current_position)
-			Draw3D.line(current_position, self.position)
-			Draw3D.point(self.position)
+		if current_action is MoveAction:
+			is_moving = false
+			finished_move.emit(current_position, self.position)
+
 		await get_tree().create_timer(WAIT_TIME).timeout
+	
+		
+func _execute_turtle_action(action, current_position) -> Tween:
+	if action is MoveAction:
+		is_moving = true
+		moving.emit(current_position)
+		var m_action: MoveAction = action as MoveAction
+		return self.execute_move(m_action.distance)
+	elif action is TurnAction:
+		var t_action: TurnAction = action as TurnAction
+		return self.execute_turn(t_action.angle)
+	elif action is RollAction:
+		var r_action: RollAction = action as RollAction
+		return self.execute_roll(r_action.angle)
+	elif action is DiveAction:
+		var d_action: DiveAction = action as DiveAction
+		return self.execute_dive(d_action.angle)
+	else:
+		print("Action Something went wrong")
+	return
 
-
-func _ready() -> void:
-	for _i in range(3):
-		self.turtle_actions.append(MoveAction.new(3))
-		self.turtle_actions.append(DiveAction.new(120))
-
-
+		
 func _on_start_button_pressed() -> void:
-	self.execute_turtle_action()
+	if is_running:
+		return
+	is_running = true
+	self.execute_turtle_actions()
+
+
+func append_turtle_actions(actions):
+	if actions is Array:
+		turtle_actions.append_array(actions)
+		return
+	if actions is MoveAction or actions is TurnAction or actions is RollAction or actions is DiveAction:
+		turtle_actions.append(actions)
+		return
 
 
 func _on_reset_button_pressed() -> void:
-	# TODO: Implement reset, Involes refactoring line and point creating logic
-	pass
+	turtle_event_queue.clear()
+	is_running = false
+	is_moving = false
+	if current_tween:
+		current_tween.finished.emit()
+		current_tween.kill()
+	self.position = Vector3.ZERO
+	self.basis = Basis.IDENTITY
 
 
 class MoveAction:

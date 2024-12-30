@@ -1,11 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://87mpup613jlr"]
+[gd_scene load_steps=7 format=3 uid="uid://87mpup613jlr"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_kjfn4"]
 [ext_resource type="PackedScene" uid="uid://bq766ueyhy4f" path="res://turtle.tscn" id="1_ugrew"]
 [ext_resource type="Script" path="res://camera_3d.gd" id="3_mylqk"]
 
-[node name="Main" type="Node3D"]
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_vg32b"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_bkxse"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_oy03l"]
+
+[node name="Main" type="Node3D" node_paths=PackedStringArray("gridMeshInstance", "pathMeshInstance", "movingMeshInstance", "turtle")]
 script = ExtResource("1_kjfn4")
+gridMeshInstance = NodePath("GridMeshInstance")
+pathMeshInstance = NodePath("PathMeshInstance")
+movingMeshInstance = NodePath("MovingMeshInstance")
+turtle = NodePath("Turtle")
 
 [node name="Turtle" parent="." instance=ExtResource("1_ugrew")]
 rotation_edit_mode = 2
@@ -46,5 +56,19 @@ offset_right = 283.0
 offset_bottom = 45.0
 text = "Reset"
 
+[node name="GridMeshInstance" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_vg32b")
+
+[node name="PathMeshInstance" type="MeshInstance3D" parent="."]
+cast_shadow = 0
+mesh = SubResource("ImmediateMesh_bkxse")
+
+[node name="MovingMeshInstance" type="MeshInstance3D" parent="."]
+mesh = SubResource("ImmediateMesh_oy03l")
+
+[connection signal="finished_move" from="Turtle" to="." method="_on_turtle_finished_move"]
+[connection signal="moving" from="Turtle" to="." method="_on_turtle_moving"]
 [connection signal="pressed" from="CanvasLayer/Control/StartButton" to="Turtle" method="_on_start_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="Turtle" method="_on_reset_button_pressed"]
