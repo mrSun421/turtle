@@ -1,8 +1,9 @@
-[gd_scene load_steps=7 format=3 uid="uid://87mpup613jlr"]
+[gd_scene load_steps=8 format=3 uid="uid://87mpup613jlr"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_kjfn4"]
 [ext_resource type="PackedScene" uid="uid://bq766ueyhy4f" path="res://turtle.tscn" id="1_ugrew"]
 [ext_resource type="Script" path="res://camera_3d.gd" id="3_mylqk"]
+[ext_resource type="PackedScene" uid="uid://demcplnrktvi2" path="res://vr_player.tscn" id="4_lw0we"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_vg32b"]
 
@@ -66,6 +67,8 @@ mesh = SubResource("ImmediateMesh_bkxse")
 
 [node name="MovingMeshInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_oy03l")
+
+[node name="VRPlayer" parent="." instance=ExtResource("4_lw0we")]
 
 [connection signal="finished_move" from="Turtle" to="." method="_on_turtle_finished_move"]
 [connection signal="moving" from="Turtle" to="." method="_on_turtle_moving"]

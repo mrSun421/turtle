@@ -18,7 +18,13 @@ config/icon="res://icon.svg"
 [autoload]
 
 Draw3D="*res://Draw3D.gd"
+VrViewport="*res://vr_viewport.gd"
 
 [dotnet]
 
 project/assembly_name="turtle"
+
+[xr]
+
+openxr/enabled=true
+shaders/enabled=true
