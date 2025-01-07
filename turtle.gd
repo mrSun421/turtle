@@ -5,8 +5,8 @@ signal moving(current_pos: Vector3)
 signal finished_move(pos1: Vector3, pos2: Vector3)
 signal finished_resetting
 
-const TWEEN_TIME = 0.5
-const WAIT_TIME = 0.2
+var tween_time = 0.5
+var wait_time = 0.2
 
 
 var turtle_actions = []
@@ -21,7 +21,7 @@ func execute_move(distance: float) -> Tween:
 	var current_position = self.position
 	var future_position = current_position + distance * self.basis.x
 
-	pos_tween.tween_property(self, "position", future_position, TWEEN_TIME)
+	pos_tween.tween_property(self, "position", future_position, tween_time)
 	return pos_tween
 
 
@@ -31,7 +31,7 @@ func execute_turn(angle: float) -> Tween:
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(normal, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
-	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
+	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
 	return rotation_tween
 
 func execute_roll(angle: float) -> Tween:
@@ -40,7 +40,7 @@ func execute_roll(angle: float) -> Tween:
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(heading, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
-	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
+	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
 	return rotation_tween
 
 func execute_dive(angle: float) -> Tween:
@@ -50,7 +50,7 @@ func execute_dive(angle: float) -> Tween:
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(left, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
-	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, TWEEN_TIME)
+	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
 	return rotation_tween
 	
 func execute_turtle_actions():
@@ -65,7 +65,7 @@ func execute_turtle_actions():
 			is_moving = false
 			finished_move.emit(current_position, self.position)
 
-		await get_tree().create_timer(WAIT_TIME).timeout
+		await get_tree().create_timer(wait_time).timeout
 	
 		
 func _execute_turtle_action(action, current_position) -> Tween:
@@ -113,6 +113,14 @@ func _on_reset_button_pressed() -> void:
 		current_tween.kill()
 	self.position = Vector3.ZERO
 	self.basis = Basis.IDENTITY
+
+
+func _on_wait_time_input_value_changed(value: float) -> void:
+	wait_time = value / 1000
+
+
+func _on_tween_time_input_value_changed(value: float) -> void:
+	tween_time = value / 1000
 
 
 class MoveAction:

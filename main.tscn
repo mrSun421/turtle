@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://87mpup613jlr"]
+[gd_scene load_steps=9 format=3 uid="uid://87mpup613jlr"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_kjfn4"]
 [ext_resource type="PackedScene" uid="uid://bq766ueyhy4f" path="res://turtle.tscn" id="1_ugrew"]
 [ext_resource type="Script" path="res://camera_3d.gd" id="3_mylqk"]
+[ext_resource type="Script" path="res://SpinboxFunctionality.gd" id="4_b8dxp"]
 [ext_resource type="PackedScene" uid="uid://demcplnrktvi2" path="res://vr_player.tscn" id="4_lw0we"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_vg32b"]
@@ -55,7 +56,43 @@ layout_mode = 0
 offset_left = 137.0
 offset_right = 283.0
 offset_bottom = 45.0
-text = "Reset"
+text = "Reset Turtle"
+
+[node name="CameraResetButton" type="Button" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 283.0
+offset_top = -1.0
+offset_right = 420.0
+offset_bottom = 44.0
+text = "Reset Camera"
+
+[node name="WaitTimeInput" type="SpinBox" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 788.0
+offset_top = 31.0
+offset_right = 1151.0
+offset_bottom = 62.0
+max_value = 1000.0
+value = 500.0
+alignment = 2
+prefix = "Length of Actions:"
+suffix = "ms"
+select_all_on_focus = true
+script = ExtResource("4_b8dxp")
+
+[node name="TweenTimeInput" type="SpinBox" parent="CanvasLayer/Control"]
+layout_mode = 0
+offset_left = 788.0
+offset_right = 1151.0
+offset_bottom = 31.0
+max_value = 1000.0
+value = 200.0
+alignment = 2
+update_on_text_changed = true
+prefix = "Time Between Actions:"
+suffix = "ms"
+select_all_on_focus = true
+script = ExtResource("4_b8dxp")
 
 [node name="GridMeshInstance" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -75,3 +112,6 @@ mesh = SubResource("ImmediateMesh_oy03l")
 [connection signal="pressed" from="CanvasLayer/Control/StartButton" to="Turtle" method="_on_start_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="." method="_on_reset_button_pressed"]
 [connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="Turtle" method="_on_reset_button_pressed"]
+[connection signal="pressed" from="CanvasLayer/Control/CameraResetButton" to="Camera3D" method="_on_camera_reset_button_pressed"]
+[connection signal="value_changed" from="CanvasLayer/Control/WaitTimeInput" to="Turtle" method="_on_wait_time_input_value_changed"]
+[connection signal="value_changed" from="CanvasLayer/Control/TweenTimeInput" to="Turtle" method="_on_tween_time_input_value_changed"]

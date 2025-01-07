@@ -37,3 +37,7 @@ func _input(event: InputEvent) -> void:
 			self.rotation_degrees.x -= mouse_translation.y * rotation_sensitivity
 			self.rotation_degrees.y -= mouse_translation.x * rotation_sensitivity
 			self.rotation.x = clamp(self.rotation.x, -PI / 2, PI / 2)
+
+
+func _on_camera_reset_button_pressed() -> void:
+	self.position = Vector3(0, 0, 5)
