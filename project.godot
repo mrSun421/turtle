@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Draw3D="*res://Draw3D.gd"
 VrViewport="*res://vr_viewport.gd"
+Server="*res://server.gd"
 
 [dotnet]
 
