@@ -14,7 +14,16 @@ var turtle_event_queue = []
 var is_moving = false
 var is_running = false
 var reset_was_pressed = false
+var pen_is_down = true
+var line_color: Color = Color.WHITE_SMOKE
 var current_tween: Tween
+
+func set_line_color_rgb8(r, g, b):
+	line_color = Color8(r, g, b)
+func set_line_color_rgbfloat(r, g, b):
+	line_color = Color(r, g, b)
+func set_line_color_string(colorString):
+	line_color = Color.from_string(colorString, Color.WHITE_SMOKE)
 
 func execute_move(distance: float) -> Tween:
 	var pos_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
@@ -25,7 +34,7 @@ func execute_move(distance: float) -> Tween:
 	return pos_tween
 
 
-func execute_turn(angle: float) -> Tween:
+func execute_yaw(angle: float) -> Tween:
 	var heading: Vector3 = self.basis.x
 	var normal: Vector3 = self.basis.y
 	var angle_in_rad = deg_to_rad(angle)
@@ -43,7 +52,7 @@ func execute_roll(angle: float) -> Tween:
 	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
 	return rotation_tween
 
-func execute_dive(angle: float) -> Tween:
+func execute_pitch(angle: float) -> Tween:
 	var heading: Vector3 = self.basis.x
 	var normal: Vector3 = self.basis.y
 	var left: Vector3 = self.basis.z
@@ -60,7 +69,8 @@ func execute_turtle_actions():
 		var current_position = self.position
 		var current_action = turtle_event_queue.pop_front()
 		current_tween = self._execute_turtle_action(current_action, current_position)
-		await current_tween.finished
+		if current_tween:
+			await current_tween.finished
 		if current_action is MoveAction:
 			is_moving = false
 			finished_move.emit(current_position, self.position)
@@ -74,15 +84,22 @@ func _execute_turtle_action(action, current_position) -> Tween:
 		moving.emit(current_position)
 		var m_action: MoveAction = action as MoveAction
 		return self.execute_move(m_action.distance)
-	elif action is TurnAction:
-		var t_action: TurnAction = action as TurnAction
-		return self.execute_turn(t_action.angle)
+	elif action is YawAction:
+		var t_action: YawAction = action as YawAction
+		return self.execute_yaw(t_action.angle)
 	elif action is RollAction:
 		var r_action: RollAction = action as RollAction
 		return self.execute_roll(r_action.angle)
-	elif action is DiveAction:
-		var d_action: DiveAction = action as DiveAction
-		return self.execute_dive(d_action.angle)
+	elif action is PitchAction:
+		var d_action: PitchAction = action as PitchAction
+		return self.execute_pitch(d_action.angle)
+	elif action is PenUpAction:
+		pen_is_down = false
+	elif action is PenDownAction:
+		pen_is_down = true
+	elif action is ColorAction:
+		var c_action: ColorAction = action as ColorAction
+		line_color = c_action.color
 	else:
 		print("Action Something went wrong")
 	return
@@ -99,7 +116,7 @@ func append_turtle_actions(actions):
 	if actions is Array:
 		turtle_actions.append_array(actions)
 		return
-	if actions is MoveAction or actions is TurnAction or actions is RollAction or actions is DiveAction:
+	else:
 		turtle_actions.append(actions)
 		return
 
@@ -113,6 +130,8 @@ func _on_reset_button_pressed() -> void:
 		current_tween.kill()
 	self.position = Vector3.ZERO
 	self.basis = Basis.IDENTITY
+	pen_is_down = true
+	line_color = Color.WHITE_SMOKE
 
 
 func _on_wait_time_input_value_changed(value: float) -> void:
@@ -128,7 +147,7 @@ class MoveAction:
 	func _init(set_distance: float = 0.0) -> void:
 		self.distance = set_distance
 
-class TurnAction:
+class YawAction:
 	var angle: float
 	func _init(set_angle: float = 0.0) -> void:
 		self.angle = set_angle
@@ -138,7 +157,20 @@ class RollAction:
 	func _init(set_angle: float = 0.0) -> void:
 		self.angle = set_angle
 
-class DiveAction:
+class PitchAction:
 	var angle: float
 	func _init(set_angle: float = 0.0) -> void:
 		self.angle = set_angle
+
+class PenUpAction:
+	func _init() -> void:
+		pass
+
+class PenDownAction:
+	func _init() -> void:
+		pass
+
+class ColorAction:
+	var color: Color
+	func _init(set_color: Color = Color.WHITE_SMOKE) -> void:
+		self.color = set_color

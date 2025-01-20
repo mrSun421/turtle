@@ -41,3 +41,4 @@ func _input(event: InputEvent) -> void:
 
 func _on_camera_reset_button_pressed() -> void:
 	self.position = Vector3(0, 0, 5)
+	self.quaternion = Quaternion.IDENTITY

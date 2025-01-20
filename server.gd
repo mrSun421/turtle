@@ -12,7 +12,6 @@ func _init() -> void:
 	print("server listening on %d" % server.get_local_port())
 
 func _process(delta: float) -> void:
-	print(len(streams))
 	for i in len(streams):
 		var stream = streams[i]
 		if stream.poll() != OK:
