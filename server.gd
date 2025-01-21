@@ -27,7 +27,7 @@ func _process(delta: float) -> void:
 					var json_data = JSON.parse_string(text_data)
 					for j in len(json_data):
 						var curr_data = json_data[j]
-						match curr_data["type"]:
+						match curr_data["action"]:
 							"color":
 								var col_dat = curr_data["color"]
 								var col = Color(col_dat["r"], col_dat["g"], col_dat["b"])
@@ -45,7 +45,7 @@ func _process(delta: float) -> void:
 							"pendown":
 								turtle.append_turtle_actions(Turtle.PenDownAction.new())
 							_:
-								print("unknown action type: %s" % curr_data["type"])
+								print("unknown action: %s" % curr_data["action"])
 					var confirmation_string = "data recieved: %s bytes" % available_bytes
 					stream.put_data(confirmation_string.to_ascii_buffer())
 		else:
