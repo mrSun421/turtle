@@ -44,6 +44,10 @@ func _process(delta: float) -> void:
 								turtle.append_turtle_actions(Turtle.PenUpAction.new())
 							"pendown":
 								turtle.append_turtle_actions(Turtle.PenDownAction.new())
+							"clear":
+								turtle.turtle_actions.clear()
+							"start":
+								turtle._on_start_button_pressed()
 							_:
 								print("unknown action: %s" % curr_data["action"])
 					var confirmation_string = "data recieved: %s bytes" % available_bytes
