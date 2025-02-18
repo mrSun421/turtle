@@ -3,7 +3,6 @@ class_name Turtle
 
 signal moving(current_pos: Vector3)
 signal finished_move(pos1: Vector3, pos2: Vector3)
-signal finished_resetting
 
 var tween_time = 0.5
 var wait_time = 0.2
@@ -35,7 +34,7 @@ func execute_move(distance: float) -> Tween:
 
 
 func execute_yaw(angle: float) -> Tween:
-	var heading: Vector3 = self.basis.x
+	var _heading: Vector3 = self.basis.x
 	var normal: Vector3 = self.basis.y
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(normal, angle_in_rad)
@@ -45,7 +44,7 @@ func execute_yaw(angle: float) -> Tween:
 
 func execute_roll(angle: float) -> Tween:
 	var heading: Vector3 = self.basis.x
-	var normal: Vector3 = self.basis.y
+	var _normal: Vector3 = self.basis.y
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(heading, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
@@ -53,8 +52,8 @@ func execute_roll(angle: float) -> Tween:
 	return rotation_tween
 
 func execute_pitch(angle: float) -> Tween:
-	var heading: Vector3 = self.basis.x
-	var normal: Vector3 = self.basis.y
+	var _heading: Vector3 = self.basis.x
+	var _normal: Vector3 = self.basis.y
 	var left: Vector3 = self.basis.z
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(left, angle_in_rad)
@@ -105,7 +104,7 @@ func _execute_turtle_action(action, current_position) -> Tween:
 	return
 
 		
-func _on_start_button_pressed() -> void:
+func _on_start_turtle_signal() -> void:
 	if is_running:
 		return
 	is_running = true
@@ -121,7 +120,7 @@ func append_turtle_actions(actions):
 		return
 
 
-func _on_reset_button_pressed() -> void:
+func _on_reset_turtle_signal() -> void:
 	turtle_event_queue.clear()
 	is_running = false
 	is_moving = false
@@ -135,6 +134,7 @@ func _on_reset_button_pressed() -> void:
 
 
 func _on_wait_time_input_value_changed(value: float) -> void:
+	print(value)
 	wait_time = value / 1000
 
 
@@ -174,3 +174,9 @@ class ColorAction:
 	var color: Color
 	func _init(set_color: Color = Color.WHITE_SMOKE) -> void:
 		self.color = set_color
+
+func _ready() -> void:
+	EventBus.connect("start_turtle", self._on_start_turtle_signal)
+	EventBus.connect("reset_turtle", self._on_reset_turtle_signal)
+	EventBus.connect("wait_time_changed", self._on_wait_time_input_value_changed)
+	EventBus.connect("tween_time_changed", self._on_tween_time_input_value_changed)

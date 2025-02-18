@@ -1,0 +1,71 @@
+[gd_scene load_steps=6 format=3 uid="uid://dg722e6xlyc5t"]
+
+[ext_resource type="Script" path="res://ui/start_button.gd" id="1_cpvim"]
+[ext_resource type="Script" path="res://ui/reset_button.gd" id="2_bwip8"]
+[ext_resource type="Script" path="res://ui/camera_reset_button.gd" id="3_fsogw"]
+[ext_resource type="Script" path="res://ui/wait_time_input.gd" id="4_mxqfl"]
+[ext_resource type="Script" path="res://ui/tween_time_input.gd" id="5_y5fny"]
+
+[node name="TurtleControlUI" type="CanvasLayer"]
+
+[node name="Control" type="Control" parent="."]
+layout_direction = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="StartButton" type="Button" parent="Control"]
+layout_mode = 0
+offset_top = -1.0
+offset_right = 137.0
+offset_bottom = 45.0
+text = "Start"
+script = ExtResource("1_cpvim")
+
+[node name="ResetButton" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 137.0
+offset_right = 283.0
+offset_bottom = 45.0
+text = "Reset Turtle"
+script = ExtResource("2_bwip8")
+
+[node name="CameraResetButton" type="Button" parent="Control"]
+layout_mode = 0
+offset_left = 283.0
+offset_top = -1.0
+offset_right = 420.0
+offset_bottom = 44.0
+text = "Reset Camera"
+script = ExtResource("3_fsogw")
+
+[node name="WaitTimeInput" type="SpinBox" parent="Control"]
+layout_mode = 0
+offset_left = 788.0
+offset_top = 31.0
+offset_right = 1151.0
+offset_bottom = 62.0
+max_value = 1000.0
+value = 500.0
+alignment = 2
+prefix = "Wait Time:"
+suffix = "ms"
+select_all_on_focus = true
+script = ExtResource("4_mxqfl")
+
+[node name="TweenTimeInput" type="SpinBox" parent="Control"]
+layout_mode = 0
+offset_left = 788.0
+offset_right = 1151.0
+offset_bottom = 31.0
+max_value = 1000.0
+value = 200.0
+alignment = 2
+update_on_text_changed = true
+prefix = "Action Time"
+suffix = "ms"
+select_all_on_focus = true
+script = ExtResource("5_y5fny")

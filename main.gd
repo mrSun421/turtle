@@ -11,6 +11,7 @@ const AXES_SPACING = 5;
 @export var turtle: Turtle
 
 func _ready() -> void:
+	EventBus.connect("reset_turtle", self._on_reset_button_pressed)
 	for i in range(-AXES_COUNT, AXES_COUNT):
 		if i == 0:
 			continue

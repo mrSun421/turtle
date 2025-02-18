@@ -1,13 +1,59 @@
-[gd_scene format=3 uid="uid://demcplnrktvi2"]
+[gd_scene load_steps=10 format=3 uid="uid://demcplnrktvi2"]
+
+[ext_resource type="Script" path="res://xr_origin_3d.gd" id="1_1y3yf"]
+[ext_resource type="PackedScene" uid="uid://bq86r4yll8po" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/left_fullglove_low.tscn" id="1_lwvhe"]
+[ext_resource type="PackedScene" uid="uid://xqimcf20s2jp" path="res://addons/godot-xr-tools/hands/scenes/lowpoly/right_fullglove_low.tscn" id="2_jgoj3"]
+[ext_resource type="PackedScene" uid="uid://cqhw276realc" path="res://addons/godot-xr-tools/functions/function_pointer.tscn" id="2_ji54h"]
+[ext_resource type="PackedScene" uid="uid://b4ysuy43poobf" path="res://addons/godot-xr-tools/functions/function_pickup.tscn" id="3_qoix7"]
+[ext_resource type="PackedScene" uid="uid://diyu06cw06syv" path="res://addons/godot-xr-tools/player/player_body.tscn" id="4_rweyf"]
+[ext_resource type="PackedScene" uid="uid://clujaf3u776a3" path="res://addons/godot-xr-tools/objects/viewport_2d_in_3d.tscn" id="7_aijy6"]
+[ext_resource type="PackedScene" uid="uid://dg3gr6ofd8yx4" path="res://addons/godot-xr-tools/functions/movement_world_grab.tscn" id="7_mfqlw"]
+[ext_resource type="PackedScene" uid="uid://dg722e6xlyc5t" path="res://ui/turtle_control_ui.tscn" id="8_0t60y"]
 
 [node name="VRPlayer" type="Node3D"]
 
-[node name="XROrigin3D" type="XROrigin3D" parent="."]
+[node name="XROrigin3D" type="XROrigin3D" parent="." node_paths=PackedStringArray("xrCamera", "xrViewport2DIn3D")]
+script = ExtResource("1_1y3yf")
+xrCamera = NodePath("XRCamera3D")
+xrViewport2DIn3D = NodePath("Viewport2Din3D")
 
 [node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
 
-[node name="LeftHand" type="XRController3D" parent="XROrigin3D"]
+[node name="LeftHandController" type="XRController3D" parent="XROrigin3D"]
 tracker = &"left_hand"
 
-[node name="RightHand" type="XRController3D" parent="XROrigin3D"]
+[node name="LeftHand" parent="XROrigin3D/LeftHandController" instance=ExtResource("1_lwvhe")]
+
+[node name="FunctionPointer" parent="XROrigin3D/LeftHandController" instance=ExtResource("2_ji54h")]
+show_laser = 2
+laser_length = 1
+
+[node name="FunctionPickup" parent="XROrigin3D/LeftHandController" instance=ExtResource("3_qoix7")]
+
+[node name="RightHandController" type="XRController3D" parent="XROrigin3D"]
 tracker = &"right_hand"
+
+[node name="RightHand" parent="XROrigin3D/RightHandController" instance=ExtResource("2_jgoj3")]
+
+[node name="FunctionPointer" parent="XROrigin3D/RightHandController" instance=ExtResource("2_ji54h")]
+show_laser = 2
+laser_length = 1
+
+[node name="FunctionPickup" parent="XROrigin3D/RightHandController" instance=ExtResource("3_qoix7")]
+
+[node name="PlayerBody" parent="XROrigin3D" instance=ExtResource("4_rweyf")]
+motion_mode = 1
+push_rigid_bodies = false
+
+[node name="MovementWorldGrab" parent="XROrigin3D" instance=ExtResource("7_mfqlw")]
+world_scale_min = 1.0
+world_scale_max = 10.0
+
+[node name="Viewport2Din3D" parent="XROrigin3D" instance=ExtResource("7_aijy6")]
+transform = Transform3D(0.005, 0, 0, 0, 0.005, 0, 0, 0, 0.005, 0, 0, -3)
+screen_size = Vector2(640, 360)
+collision_layer = 5242880
+scene = ExtResource("8_0t60y")
+viewport_size = Vector2(640, 360)
+unshaded = true
+scene_properties_keys = PackedStringArray()

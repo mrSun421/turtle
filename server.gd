@@ -12,7 +12,7 @@ func _init() -> void:
 		print_debug("server failed to start listening on port %d!" % port)
 	print("server listening on %d" % server.get_local_port())
 
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	for i in len(streams):
 		var stream = streams[i]
 		if stream.poll() != OK:
@@ -47,7 +47,7 @@ func _process(delta: float) -> void:
 							"clear":
 								turtle.turtle_actions.clear()
 							"start":
-								turtle._on_start_button_pressed()
+								turtle._on_start_turtle_signal()
 							_:
 								print("unknown action: %s" % curr_data["action"])
 					var confirmation_string = "data recieved: %s bytes" % available_bytes

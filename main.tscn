@@ -1,18 +1,21 @@
-[gd_scene load_steps=11 format=3 uid="uid://87mpup613jlr"]
+[gd_scene load_steps=13 format=3 uid="uid://87mpup613jlr"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_kjfn4"]
 [ext_resource type="PackedScene" uid="uid://bq766ueyhy4f" path="res://turtle.tscn" id="1_ugrew"]
 [ext_resource type="Script" path="res://camera_3d.gd" id="3_mylqk"]
-[ext_resource type="Script" path="res://SpinboxFunctionality.gd" id="4_b8dxp"]
 [ext_resource type="PackedScene" uid="uid://demcplnrktvi2" path="res://vr_player.tscn" id="4_lw0we"]
+[ext_resource type="PackedScene" uid="uid://dg722e6xlyc5t" path="res://ui/turtle_control_ui.tscn" id="4_omvo6"]
 [ext_resource type="Script" path="res://vr_viewport.gd" id="5_ppk15"]
 [ext_resource type="PackedScene" uid="uid://bwa3nj31wpgpb" path="res://server.tscn" id="6_flvs5"]
+[ext_resource type="PackedScene" uid="uid://57q7hhomocdh" path="res://addons/godot-xr-tools/objects/world_grab_area.tscn" id="9_ohkvv"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_vg32b"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_bkxse"]
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_oy03l"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ugpin"]
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("gridMeshInstance", "pathMeshInstance", "movingMeshInstance", "turtle")]
 script = ExtResource("1_kjfn4")
@@ -27,6 +30,7 @@ rotation_edit_mode = 2
 [node name="Camera3D" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 5)
 rotation_edit_mode = 1
+cull_mask = 3
 script = ExtResource("3_mylqk")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -34,67 +38,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20, -20, -20)
 
 [node name="DirectionalLight3D2" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 20, 20)
-
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Control" type="Control" parent="CanvasLayer"]
-layout_direction = 1
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="StartButton" type="Button" parent="CanvasLayer/Control"]
-layout_mode = 0
-offset_top = -1.0
-offset_right = 137.0
-offset_bottom = 45.0
-text = "Start"
-
-[node name="ResetButton" type="Button" parent="CanvasLayer/Control"]
-layout_mode = 0
-offset_left = 137.0
-offset_right = 283.0
-offset_bottom = 45.0
-text = "Reset Turtle"
-
-[node name="CameraResetButton" type="Button" parent="CanvasLayer/Control"]
-layout_mode = 0
-offset_left = 283.0
-offset_top = -1.0
-offset_right = 420.0
-offset_bottom = 44.0
-text = "Reset Camera"
-
-[node name="WaitTimeInput" type="SpinBox" parent="CanvasLayer/Control"]
-layout_mode = 0
-offset_left = 788.0
-offset_top = 31.0
-offset_right = 1151.0
-offset_bottom = 62.0
-max_value = 1000.0
-value = 500.0
-alignment = 2
-prefix = "Wait Time:"
-suffix = "ms"
-select_all_on_focus = true
-script = ExtResource("4_b8dxp")
-
-[node name="TweenTimeInput" type="SpinBox" parent="CanvasLayer/Control"]
-layout_mode = 0
-offset_left = 788.0
-offset_right = 1151.0
-offset_bottom = 31.0
-max_value = 1000.0
-value = 200.0
-alignment = 2
-update_on_text_changed = true
-prefix = "Action Time"
-suffix = "ms"
-select_all_on_focus = true
-script = ExtResource("4_b8dxp")
 
 [node name="GridMeshInstance" type="MeshInstance3D" parent="."]
 cast_shadow = 0
@@ -107,23 +50,30 @@ mesh = SubResource("ImmediateMesh_bkxse")
 [node name="MovingMeshInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_oy03l")
 
-[node name="VRViewport" type="SubViewport" parent="."]
+[node name="TurtleControlUI" parent="." instance=ExtResource("4_omvo6")]
+layer = 2
+
+[node name="VRViewport" type="SubViewport" parent="." node_paths=PackedStringArray("vrPlayer")]
 use_xr = true
+canvas_cull_mask = 4294967293
 size = Vector2i(0, 0)
 render_target_update_mode = 4
 script = ExtResource("5_ppk15")
+vrPlayer = NodePath("VRPlayer")
 
 [node name="VRPlayer" parent="VRViewport" instance=ExtResource("4_lw0we")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.124, 0, 5)
 
 [node name="Server" parent="." node_paths=PackedStringArray("turtle") instance=ExtResource("6_flvs5")]
 turtle = NodePath("../Turtle")
 
+[node name="WorldGrabArea" parent="." instance=ExtResource("9_ohkvv")]
+gravity_space_override = 3
+gravity = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WorldGrabArea"]
+transform = Transform3D(1000, 0, 0, 0, 1000, 0, 0, 0, 1000, 0, 0, 0)
+shape = SubResource("BoxShape3D_ugpin")
+
 [connection signal="finished_move" from="Turtle" to="." method="_on_turtle_finished_move"]
 [connection signal="moving" from="Turtle" to="." method="_on_turtle_moving"]
-[connection signal="pressed" from="CanvasLayer/Control/StartButton" to="Turtle" method="_on_start_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="." method="_on_reset_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/ResetButton" to="Turtle" method="_on_reset_button_pressed"]
-[connection signal="pressed" from="CanvasLayer/Control/CameraResetButton" to="Camera3D" method="_on_camera_reset_button_pressed"]
-[connection signal="value_changed" from="CanvasLayer/Control/WaitTimeInput" to="Turtle" method="_on_wait_time_input_value_changed"]
-[connection signal="value_changed" from="CanvasLayer/Control/TweenTimeInput" to="Turtle" method="_on_tween_time_input_value_changed"]
