@@ -25,6 +25,7 @@ func _process(_delta: float) -> void:
 				var text_data = stream.get_utf8_string(available_bytes)
 				if text_data:
 					var json_data = JSON.parse_string(text_data)
+					print(json_data)
 					match typeof(json_data):
 						TYPE_ARRAY:
 							for j in len(json_data):
@@ -35,7 +36,7 @@ func _process(_delta: float) -> void:
 						_:
 							print("unknown JSON pared type")
 						
-					var confirmation_string = "data recieved: %s bytes" % available_bytes
+					var confirmation_string = "data recieved: %s bytes\n" % available_bytes
 					stream.put_data(confirmation_string.to_ascii_buffer())
 		else:
 			streams[i].disconnect_from_host()
