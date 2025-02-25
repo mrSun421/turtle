@@ -25,31 +25,16 @@ func _process(_delta: float) -> void:
 				var text_data = stream.get_utf8_string(available_bytes)
 				if text_data:
 					var json_data = JSON.parse_string(text_data)
-					for j in len(json_data):
-						var curr_data = json_data[j]
-						match curr_data["action"]:
-							"color":
-								var col_dat = curr_data["color"]
-								var col = Color(col_dat["r"], col_dat["g"], col_dat["b"])
-								turtle.append_turtle_actions(Turtle.ColorAction.new(col))
-							"move":
-								turtle.append_turtle_actions(Turtle.MoveAction.new(curr_data["value"]))
-							"yaw":
-								turtle.append_turtle_actions(Turtle.YawAction.new(curr_data["value"]))
-							"pitch":
-								turtle.append_turtle_actions(Turtle.PitchAction.new(curr_data["value"]))
-							"roll":
-								turtle.append_turtle_actions(Turtle.RollAction.new(curr_data["value"]))
-							"penup":
-								turtle.append_turtle_actions(Turtle.PenUpAction.new())
-							"pendown":
-								turtle.append_turtle_actions(Turtle.PenDownAction.new())
-							"clear":
-								turtle.turtle_actions.clear()
-							"start":
-								turtle._on_start_turtle_signal()
-							_:
-								print("unknown action: %s" % curr_data["action"])
+					match typeof(json_data):
+						TYPE_ARRAY:
+							for j in len(json_data):
+								var curr_data = json_data[j]
+								_parse_data(curr_data)
+						TYPE_DICTIONARY:
+							_parse_data(json_data)
+						_:
+							print("unknown JSON pared type")
+						
 					var confirmation_string = "data recieved: %s bytes" % available_bytes
 					stream.put_data(confirmation_string.to_ascii_buffer())
 		else:
@@ -63,3 +48,28 @@ func _process(_delta: float) -> void:
 		newStream.set_no_delay(true)
 		streams.append(newStream)
 		print("took connection")
+
+func _parse_data(data: Dictionary) -> void:
+	match data["action"]:
+		"color":
+			var col_dat = data["color"]
+			var col = Color(col_dat["r"], col_dat["g"], col_dat["b"])
+			turtle.append_turtle_actions(Turtle.ColorAction.new(col))
+		"move":
+			turtle.append_turtle_actions(Turtle.MoveAction.new(data["value"]))
+		"yaw":
+			turtle.append_turtle_actions(Turtle.YawAction.new(data["value"]))
+		"pitch":
+			turtle.append_turtle_actions(Turtle.PitchAction.new(data["value"]))
+		"roll":
+			turtle.append_turtle_actions(Turtle.RollAction.new(data["value"]))
+		"penup":
+			turtle.append_turtle_actions(Turtle.PenUpAction.new())
+		"pendown":
+			turtle.append_turtle_actions(Turtle.PenDownAction.new())
+		"clear":
+			turtle.turtle_actions.clear()
+		"start":
+			turtle._on_start_turtle_signal()
+		_:
+			print("unknown action: %s" % data["action"])
