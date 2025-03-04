@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://87mpup613jlr"]
+[gd_scene load_steps=12 format=3 uid="uid://87mpup613jlr"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_kjfn4"]
 [ext_resource type="PackedScene" uid="uid://bq766ueyhy4f" path="res://turtle.tscn" id="1_ugrew"]
@@ -11,16 +11,13 @@
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_vg32b"]
 
-[sub_resource type="ImmediateMesh" id="ImmediateMesh_bkxse"]
-
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_oy03l"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_ugpin"]
 
-[node name="Main" type="Node3D" node_paths=PackedStringArray("gridMeshInstance", "pathMeshInstance", "movingMeshInstance", "turtle")]
+[node name="Main" type="Node3D" node_paths=PackedStringArray("gridMeshInstance", "movingMeshInstance", "turtle")]
 script = ExtResource("1_kjfn4")
 gridMeshInstance = NodePath("GridMeshInstance")
-pathMeshInstance = NodePath("PathMeshInstance")
 movingMeshInstance = NodePath("MovingMeshInstance")
 turtle = NodePath("Turtle")
 
@@ -42,10 +39,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 20, 20, 20)
 [node name="GridMeshInstance" type="MeshInstance3D" parent="."]
 cast_shadow = 0
 mesh = SubResource("ImmediateMesh_vg32b")
-
-[node name="PathMeshInstance" type="MeshInstance3D" parent="."]
-cast_shadow = 0
-mesh = SubResource("ImmediateMesh_bkxse")
 
 [node name="MovingMeshInstance" type="MeshInstance3D" parent="."]
 mesh = SubResource("ImmediateMesh_oy03l")

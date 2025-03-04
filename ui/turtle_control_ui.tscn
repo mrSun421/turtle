@@ -43,11 +43,14 @@ text = "Reset Camera"
 script = ExtResource("3_fsogw")
 
 [node name="WaitTimeInput" type="SpinBox" parent="Control"]
-layout_mode = 0
-offset_left = 788.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -363.0
 offset_top = 31.0
-offset_right = 1151.0
 offset_bottom = 62.0
+grow_horizontal = 0
 max_value = 1000.0
 value = 500.0
 alignment = 2
@@ -57,10 +60,13 @@ select_all_on_focus = true
 script = ExtResource("4_mxqfl")
 
 [node name="TweenTimeInput" type="SpinBox" parent="Control"]
-layout_mode = 0
-offset_left = 788.0
-offset_right = 1151.0
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -363.0
 offset_bottom = 31.0
+grow_horizontal = 0
 max_value = 1000.0
 value = 200.0
 alignment = 2

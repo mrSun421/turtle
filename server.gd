@@ -25,7 +25,6 @@ func _process(_delta: float) -> void:
 				var text_data = stream.get_utf8_string(available_bytes)
 				if text_data:
 					var json_data = JSON.parse_string(text_data)
-					print(json_data)
 					match typeof(json_data):
 						TYPE_ARRAY:
 							for j in len(json_data):

@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://dq0jne4utxp6g"]
+
+[ext_resource type="Script" path="res://path_mesh_instance.gd" id="1_mcqi1"]
+
+[node name="PathMeshInstance" type="MeshInstance3D"]
+cast_shadow = 0
+script = ExtResource("1_mcqi1")
