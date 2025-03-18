@@ -39,7 +39,7 @@ func execute_yaw(angle: float) -> Tween:
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(normal, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
-	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
+	rotation_tween.tween_property(self, "quaternion", quaternion_rotation * self.quaternion, tween_time)
 	return rotation_tween
 
 func execute_roll(angle: float) -> Tween:
@@ -48,7 +48,7 @@ func execute_roll(angle: float) -> Tween:
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(heading, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
-	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
+	rotation_tween.tween_property(self, "quaternion", quaternion_rotation * self.quaternion, tween_time)
 	return rotation_tween
 
 func execute_pitch(angle: float) -> Tween:
@@ -58,7 +58,7 @@ func execute_pitch(angle: float) -> Tween:
 	var angle_in_rad = deg_to_rad(angle)
 	var quaternion_rotation = Quaternion(left, angle_in_rad)
 	var rotation_tween = create_tween().set_trans(Tween.TRANS_LINEAR)
-	rotation_tween.tween_property(self, "quaternion", self.quaternion * quaternion_rotation, tween_time)
+	rotation_tween.tween_property(self, "quaternion", quaternion_rotation * self.quaternion, tween_time)
 	return rotation_tween
 	
 func execute_turtle_actions():

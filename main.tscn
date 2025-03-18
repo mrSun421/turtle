@@ -16,6 +16,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_ugpin"]
 
 [node name="Main" type="Node3D" node_paths=PackedStringArray("gridMeshInstance", "movingMeshInstance", "turtle")]
+rotation_edit_mode = 2
 script = ExtResource("1_kjfn4")
 gridMeshInstance = NodePath("GridMeshInstance")
 movingMeshInstance = NodePath("MovingMeshInstance")
